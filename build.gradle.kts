@@ -3,16 +3,16 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 object Versions {
-    const val jdk = "11"
-    const val springBootGradlePlugin = "2.4.1"
+    const val jdk = "17"
+    const val springBootGradlePlugin = "2.6.6"
 }
 
 plugins {
     application
     idea
-    kotlin("jvm") version "1.4.31"
-    kotlin("plugin.spring") version "1.4.31"
-    id("org.springframework.boot") version "2.6.2"
+    kotlin("jvm") version "1.6.10"
+    kotlin("plugin.spring") version "1.6.10"
+    id("org.springframework.boot") version "2.6.6"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
 }
 

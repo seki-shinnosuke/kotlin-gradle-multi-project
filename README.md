@@ -5,9 +5,9 @@ Kotlin x SpringBootでのGradleマルチプロジェクトサンプル
 ## バージョン
 | 名称 | バージョン |
 | ---- | ---- |
-| OpenJDK | 11(Amazon Corretto) |
-| Kotlin | 1.4.31 |
-| SpringBoot | 2.6.2 |
+| OpenJDK | 17(Amazon Corretto) |
+| Kotlin | 1.6.10 |
+| SpringBoot | 2.6.6 |
 | Gradle | 7.0.2 |
 
 ## ディレクトリ構造
