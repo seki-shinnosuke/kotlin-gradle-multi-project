@@ -4,7 +4,6 @@ import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 object Versions {
     const val jdk = "17"
-    const val springBootGradlePlugin = "2.6.6"
 }
 
 plugins {
@@ -32,6 +31,12 @@ allprojects {
         }
         withType<Test>().configureEach {
             useJUnitPlatform()
+            val javaToolchains = project.extensions.getByType<JavaToolchainService>()
+            javaLauncher.set(
+                javaToolchains.launcherFor {
+                    languageVersion.set(JavaLanguageVersion.of(Versions.jdk.toInt()))
+                }
+            )
         }
 
         // 共通部品を入れるプロジェクト以外はBootJarを生成可能にする
@@ -67,7 +72,11 @@ subprojects {
         implementation("org.jetbrains.kotlin:kotlin-stdlib")
         implementation("org.jetbrains.kotlin:kotlin-reflect")
         implementation("org.jetbrains.kotlin:kotlin-gradle-plugin")
-        implementation("org.springframework.boot:spring-boot-gradle-plugin:${Versions.springBootGradlePlugin}")
+        implementation("org.springframework.boot:spring-boot-gradle-plugin:2.6.6")
+
+        testImplementation("org.springframework.boot:spring-boot-starter-test") {
+            exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
+        }
     }
 
     configure<DependencyManagementExtension> {
@@ -90,6 +99,19 @@ project(":common") {
     }
     tasks.jar {
         enabled = true
+    }
+
+    // commonに作成したテストクラスを共通部品として他のプロジェクトでも取り込みたい場合
+    val testCompile by configurations.creating
+    configurations.create("testArtifacts") {
+        extendsFrom(testCompile)
+    }
+    tasks.register("testJar", Jar::class.java) {
+        archiveClassifier.set("test")
+        from(sourceSets["test"].output)
+    }
+    artifacts {
+        add("testArtifacts", tasks.named<Jar>("testJar"))
     }
 }
 
